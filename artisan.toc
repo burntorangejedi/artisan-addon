@@ -1,0 +1,28 @@
+## Interface: 100207
+## Title: Artisan
+## Notes: Profession and recipe management for raiding guilds
+## Author: burntorangejedi
+## Version: 1.0
+## Dependencies: LibSharedMedia-3.0
+
+core/init.lua
+core/fonts.lua
+core/ui.lua
+
+libs/LibStub/LibStub.lua
+libs/AceAddon-3.0/AceAddon-3.0.lua
+libs/AceConsole-3.0/AceConsole-3.0.lua
+libs/AceGUI-3.0/AceGUI-3.0.lua
+libs/AceConfig-3.0/AceConfig-3.0.lua
+libs/AceConfig-3.0/AceConfigRegistry-3.0/AceConfigRegistry-3.0.lua
+libs/AceConfig-3.0/AceConfigCmd-3.0/AceConfigCmd-3.0.lua
+libs/AceConfig-3.0/AceConfigDialog-3.0/AceConfigDialog-3.0.lua
+libs/AceConfig-3.0/AceConfigDropdown-3.0/AceConfigDropdown-3.0.lua
+
+media/CreatoDisplay-Thin.ttf 
+media/CreatoDisplay-Black.ttf 
+media/CreatoDisplay-Bold.ttf 
+media/CreatoDisplay-ExtraBold.ttf 
+media/CreatoDisplay-Light.ttf 
+media/CreatoDisplay-Medium.ttf 
+media/CreatoDisplay-Regular.ttf 
