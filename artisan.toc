@@ -1,13 +1,9 @@
 ## Interface: 100207
 ## Title: Artisan
-## Notes: Profession and recipe management for raiding guilds
+## Notes: Companion addon for the Artisan Discord Bot
 ## Author: burntorangejedi
 ## Version: 1.0
-## Dependencies: LibSharedMedia-3.0
-
-core/init.lua
-core/fonts.lua
-core/ui.lua
+artisan.lua
 
 libs/LibStub/LibStub.lua
 libs/AceAddon-3.0/AceAddon-3.0.lua
@@ -18,6 +14,7 @@ libs/AceConfig-3.0/AceConfigRegistry-3.0/AceConfigRegistry-3.0.lua
 libs/AceConfig-3.0/AceConfigCmd-3.0/AceConfigCmd-3.0.lua
 libs/AceConfig-3.0/AceConfigDialog-3.0/AceConfigDialog-3.0.lua
 libs/AceConfig-3.0/AceConfigDropdown-3.0/AceConfigDropdown-3.0.lua
+libs/LibSharedMedia-3.0/LibSharedMedia-3.0.lua
 
 media/CreatoDisplay-Thin.ttf 
 media/CreatoDisplay-Black.ttf 
@@ -26,3 +23,5 @@ media/CreatoDisplay-ExtraBold.ttf
 media/CreatoDisplay-Light.ttf 
 media/CreatoDisplay-Medium.ttf 
 media/CreatoDisplay-Regular.ttf 
+
+commands/help.lua
