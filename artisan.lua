@@ -9,28 +9,16 @@ ArtisanCommands = ArtisanCommands or {}
 local commandModules = {
     help = "commands/help.lua",
     export = "commands/export.lua",
+    options = "commands/options.lua",
+    rescan = "commands/rescan.lua",
 }
 
--- Register fonts with LibSharedMedia
-local function RegisterArtisanFonts()
-    local LSM = LibStub and LibStub("LibSharedMedia-3.0", true)
-    if not LSM then return end
-    local fontList = {
-        { key = "CreatoDisplay-Black",     file = "Interface/AddOns/" .. ADDON_NAME .. "/media/CreatoDisplay-Black.ttf" },
-        { key = "CreatoDisplay-Bold",      file = "Interface/AddOns/" .. ADDON_NAME .. "/media/CreatoDisplay-Bold.ttf" },
-        { key = "CreatoDisplay-ExtraBold", file = "Interface/AddOns/" .. ADDON_NAME .. "/media/CreatoDisplay-ExtraBold.ttf" },
-        { key = "CreatoDisplay-Light",     file = "Interface/AddOns/" .. ADDON_NAME .. "/media/CreatoDisplay-Light.ttf" },
-        { key = "CreatoDisplay-Medium",    file = "Interface/AddOns/" .. ADDON_NAME .. "/media/CreatoDisplay-Medium.ttf" },
-        { key = "CreatoDisplay-Regular",   file = "Interface/AddOns/" .. ADDON_NAME .. "/media/CreatoDisplay-Regular.ttf" },
-        { key = "CreatoDisplay-Thin",      file = "Interface/AddOns/" .. ADDON_NAME .. "/media/CreatoDisplay-Thin.ttf" },
-    }
-    for _, font in ipairs(fontList) do
-        LSM:Register("font", font.key, font.file)
-    end
-end
+-- Fonts are registered by `fonts.lua` via the global Artisan_RegisterFonts()
 
 function Artisan:OnInitialize()
-    RegisterArtisanFonts()
+    if Artisan_RegisterFonts then
+        Artisan_RegisterFonts()
+    end
     self:RegisterChatCommand("artisan", "HandleSlashCommand")
 end
 

@@ -3,6 +3,7 @@
 ## Notes: Companion addon for the Artisan Discord Bot
 ## Author: burntorangejedi
 ## Version: 1.0
+## SavedVariables: ArtisanDB
 artisan.lua
 
 libs/LibStub/LibStub.lua
@@ -25,3 +26,7 @@ media/CreatoDisplay-Medium.ttf
 media/CreatoDisplay-Regular.ttf 
 
 commands/help.lua
+fonts.lua
+tooltip.lua
+commands/options.lua
+commands/rescan.lua
