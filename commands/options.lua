@@ -5,7 +5,8 @@ local AceConfigDialog = LibStub and LibStub("AceConfigDialog-3.0", true)
 
 local options = {
     name = "Artisan",
-    handler = nil,
+    -- provide a minimal handler object so AceConfigDialog has a valid handler context
+    handler = {},
     type = 'group',
     args = {
         modifier = {
@@ -24,5 +25,17 @@ local options = {
 
 if AceConfig and AceConfigDialog then
     AceConfig:RegisterOptionsTable("Artisan", options)
-    AceConfigDialog:AddToBlizOptions("Artisan", "Artisan")
+    -- Try to add to Blizzard options safely. Some clients or loading orders may cause AddToBlizOptions
+    -- to fail because the Blizzard options frame or internal state isn't ready. Use pcall and
+    -- defer to PLAYER_LOGIN if necessary.
+    local ok, err = pcall(function() AceConfigDialog:AddToBlizOptions("Artisan", "Artisan") end)
+    if not ok then
+        -- Defer until PLAYER_LOGIN
+        local f = CreateFrame("Frame")
+        f:RegisterEvent("PLAYER_LOGIN")
+        f:SetScript("OnEvent", function(self)
+            pcall(function() AceConfigDialog:AddToBlizOptions("Artisan", "Artisan") end)
+            self:UnregisterEvent("PLAYER_LOGIN")
+        end)
+    end
 end

@@ -181,6 +181,17 @@ local function addCraftableToTooltip(tt, link)
     tt:Show()
 end
 
+local function safeHandleTooltip(tt)
+    if not tt then return end
+    local name, link = tt:GetItem()
+    lastLink = link
+    if not link then return end
+    if shouldShowForCurrentModifier() then
+        addProfessionsToTooltip(tt, link)
+        addCraftableToTooltip(tt, link)
+    end
+end
+
 local tooltipHook = CreateFrame("Frame")
 tooltipHook:SetScript("OnEvent", function(self, event, ...)
     if event == "TRADE_SKILL_SHOW" or event == "CRAFT_SHOW" or event == "TRADE_SKILL_UPDATE" then
@@ -201,31 +212,61 @@ tooltipHook:SetScript("OnEvent", function(self, event, ...)
 end)
 
 tooltipHook:RegisterEvent("PLAYER_LOGIN")
-tooltipHook:RegisterEvent("TRADE_SKILL_SHOW")
-tooltipHook:RegisterEvent("CRAFT_SHOW")
-tooltipHook:RegisterEvent("TRADE_SKILL_UPDATE")
-tooltipHook:RegisterEvent("MODIFIER_STATE_CHANGED")
+-- Some clients (retail vs classic/versions) may not define all trade/craft events.
+-- Use pcall to register events so we don't throw an error when an event is unknown.
+pcall(function() tooltipHook:RegisterEvent("TRADE_SKILL_SHOW") end)
+pcall(function() tooltipHook:RegisterEvent("CRAFT_SHOW") end)
+pcall(function() tooltipHook:RegisterEvent("TRADE_SKILL_UPDATE") end)
+pcall(function() tooltipHook:RegisterEvent("MODIFIER_STATE_CHANGED") end)
 
--- Hook GameTooltip when it's set to an item
-GameTooltip:HookScript("OnTooltipSetItem", function(tt)
-    local name, link = tt:GetItem()
-    lastLink = link
-    if not link then return end
-    if shouldShowForCurrentModifier() then
-        addProfessionsToTooltip(tt, link)
-        addCraftableToTooltip(tt, link)
+-- Robust tooltip hooking: prefer OnTooltipSetItem, otherwise fall back to hooksecurefunc on setter methods
+local function tryHookGameTooltip()
+    local hooked = false
+    if GameTooltip and GameTooltip.HookScript then
+        local canHook = true
+        if GameTooltip.HasScript then
+            canHook = GameTooltip:HasScript("OnTooltipSetItem")
+        end
+        if canHook then
+            local ok = pcall(function()
+                GameTooltip:HookScript("OnTooltipSetItem", function(tt) safeHandleTooltip(tt) end)
+            end)
+            hooked = ok
+        end
     end
-end)
+
+    -- Fallbacks using hooksecurefunc for common tooltip setters
+    if not hooked and _G.hooksecurefunc then
+        pcall(function() hooksecurefunc(GameTooltip, "SetHyperlink", function(tt, link) safeHandleTooltip(tt) end) end)
+        pcall(function() hooksecurefunc(GameTooltip, "SetBagItem", function(tt, bag, slot) safeHandleTooltip(tt) end) end)
+        pcall(function() hooksecurefunc(GameTooltip, "SetInventoryItem", function(tt, unit, slot) safeHandleTooltip(tt) end) end)
+        pcall(function() hooksecurefunc(GameTooltip, "SetMerchantItem", function(tt, index) safeHandleTooltip(tt) end) end)
+        -- Consider other setters if needed
+    end
+end
+
+tryHookGameTooltip()
 
 -- Also hook ItemRefTooltip (links opened from chat)
-if ItemRefTooltip then
-    ItemRefTooltip:HookScript("OnTooltipSetItem", function(tt)
-        local name, link = tt:GetItem()
-        lastLink = link
-        if not link then return end
-        if shouldShowForCurrentModifier() then
-            addProfessionsToTooltip(tt, link)
-            addCraftableToTooltip(tt, link)
+local function tryHookItemRefTooltip()
+    if not ItemRefTooltip then return end
+    local hooked = false
+    if ItemRefTooltip and ItemRefTooltip.HookScript then
+        local canHookRef = true
+        if ItemRefTooltip.HasScript then
+            canHookRef = ItemRefTooltip:HasScript("OnTooltipSetItem")
         end
-    end)
+        if canHookRef then
+            local ok = pcall(function()
+                ItemRefTooltip:HookScript("OnTooltipSetItem", function(tt) safeHandleTooltip(tt) end)
+            end)
+            hooked = ok
+        end
+    end
+
+    if not hooked and _G.hooksecurefunc then
+        pcall(function() hooksecurefunc(ItemRefTooltip, "SetHyperlink", function(tt, link) safeHandleTooltip(tt) end) end)
+    end
 end
+
+tryHookItemRefTooltip()

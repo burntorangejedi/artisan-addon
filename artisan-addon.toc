@@ -4,26 +4,18 @@
 ## Author: burntorangejedi
 ## Version: 1.0
 ## SavedVariables: ArtisanDB
-artisan.lua
 
 libs/LibStub/LibStub.lua
 libs/AceAddon-3.0/AceAddon-3.0.lua
 libs/AceConsole-3.0/AceConsole-3.0.lua
 libs/AceGUI-3.0/AceGUI-3.0.lua
-libs/AceConfig-3.0/AceConfig-3.0.lua
 libs/AceConfig-3.0/AceConfigRegistry-3.0/AceConfigRegistry-3.0.lua
 libs/AceConfig-3.0/AceConfigCmd-3.0/AceConfigCmd-3.0.lua
+libs/AceConfig-3.0/AceConfig-3.0.lua
 libs/AceConfig-3.0/AceConfigDialog-3.0/AceConfigDialog-3.0.lua
-libs/AceConfig-3.0/AceConfigDropdown-3.0/AceConfigDropdown-3.0.lua
 libs/LibSharedMedia-3.0/LibSharedMedia-3.0.lua
 
-media/CreatoDisplay-Thin.ttf 
-media/CreatoDisplay-Black.ttf 
-media/CreatoDisplay-Bold.ttf 
-media/CreatoDisplay-ExtraBold.ttf 
-media/CreatoDisplay-Light.ttf 
-media/CreatoDisplay-Medium.ttf 
-media/CreatoDisplay-Regular.ttf 
+artisan-addon.lua
 
 commands/help.lua
 fonts.lua
